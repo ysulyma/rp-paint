@@ -1,0 +1,44 @@
+{
+  "name": "rp-paint",
+  "version": "1.1.2",
+  "description": "Doodling recorder and replayer for ractive-player/ractive-editor",
+  "files": [
+    "rp-paint.js",
+    "rp-paint.recorder.js",
+    "rp-paint.d.ts",
+    "recorder.d.ts"
+  ],
+  "main": "rp-paint.js",
+  "typings": "rp-paint.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ysulyma/rp-paint.git"
+  },
+  "keywords": [
+    "ractive-player"
+  ],
+  "author": "Yuri Sulyma <yuri@lmqm.xyz>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ysulyma/rp-paint/issues"
+  },
+  "homepage": "https://github.com/ysulyma/rp-paint#readme",
+  "peerDependencies": {
+    "@types/react": "^16.8.0",
+    "rp-recording": "^1.0.0",
+    "ractive-player": "^1.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.25",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-react-hooks": "^2.5.1",
+    "react": "^16.13.1",
+    "ts-loader": "^6.2.2",
+    "typescript": "^3.8.3",
+    "webpack": "^4.42.0",
+    "webpack-cli": "^3.3.11"
+  }
+}

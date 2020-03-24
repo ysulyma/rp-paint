@@ -1,0 +1,16 @@
+<svg
+   width="72.418961mm"
+   height="33.932152mm"
+   viewBox="0 0 72.418961 33.932152"
+>
+  <g
+     transform="translate(-31.543342,-132.63477)">
+    <path
+       style="fill:#cecece;fill-opacity:1;stroke:#000000;stroke-width:1.05799997;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 36.072339,133.16377 h 31.680484 v 32.87415 H 36.072339 c -2.215998,0 -3.999997,-1.784 -3.999997,-4 v -24.87415 c 0,-2.216 1.783999,-4 3.999997,-4 z"
+       />
+    <path
+       style="fill:#ff0000;fill-opacity:0.65238097;stroke:#000000;stroke-width:1.05799997;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 67.752823,133.16377 h 31.680483 c 2.216004,0 3.999994,1.784 3.999994,4 v 24.87415 c 0,2.216 -1.78399,4 -3.999994,4 H 67.752823 Z"/>
+  </g>
+</svg>
