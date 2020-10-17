@@ -62,7 +62,7 @@ const baseConfig = {
 module.exports = [
   {
     ...baseConfig,
-    entry: `${__dirname}/src/Paint.tsx`,
+    entry: `${__dirname}/src/plugin.tsx`,
     output: {
       filename: "rp-paint.js",
       path: __dirname,

@@ -7,7 +7,8 @@ const {floor} = Math;
 export default {
   name: "eraser",
 
-  hover({canvas, hit}) {
+  hover({layers, hit}) {
+    const canvas = layers.aid;
     const rect = canvas.getBoundingClientRect();
     const ctx = canvas.getContext("2d");
 
@@ -28,7 +29,8 @@ export default {
     ctx.stroke();
   },
 
-  down({canvas, hit, record, state}) {
+  down({consumer, layers, hit, record}) {
+    const canvas = layers.stable;
     const rect = canvas.getBoundingClientRect();
 
     const action = {
@@ -37,10 +39,12 @@ export default {
       y:  (hit.y - rect.top) / rect.height,
       r: 0.02
     };
-    record(action);
+    consumer.record(action);
+    consumer.repaint();
   },
 
-  move({canvas, hit, record}) {
+  move({consumer, layers, hit}) {
+    const canvas = layers.stable;
     const rect = canvas.getBoundingClientRect();
 
     const action = {
@@ -49,10 +53,7 @@ export default {
       y:  (hit.y - rect.top) / rect.height,
       r: 0.02
     };
-    record(action);
-  },
-
-  up({canvas, record, state, target}) {
-
+    consumer.record(action);
+    consumer.repaint();
   }
 } as Tool;

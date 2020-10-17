@@ -21,3 +21,11 @@ export function offsetParent(node: HTMLElement) {
 
   return { left: rect.left, top: rect.top, width: innerWidth, height: innerHeight };
 }
+
+export function extractRefs<T>(o: {[key: string]: React.MutableRefObject<T>;}): {[key: string]: T} {
+  const ret = {};
+  for (let key in o) {
+    ret[key] = o[key].current;
+  }
+  return ret;
+}

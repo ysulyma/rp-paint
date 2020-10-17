@@ -1,3 +1,12 @@
+export interface Clear {
+  type: "clear";
+}
+
+export interface ChangeSheet {
+  type: "change-sheet";
+  sheet: number;
+}
+
 export interface Erase {
   type: "erase";
   x: number;
@@ -38,9 +47,16 @@ export interface MakePath {
   points: [number, number][];
 }
 
+export interface Undo {
+  type: "undo";
+}
+
 export type Action =
-  Erase |
-  MoveTo | LineTo | EndPath | MakePath;
+  Clear | Erase | SetStrokeStyle |
+  ChangeSheet |
+  MoveTo | LineTo | EndPath | MakePath
+  | Undo;
 
 export type UIAction =
   SetStrokeStyle | SetTool;
+

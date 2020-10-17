@@ -1,5 +1,7 @@
 import {Action, LineTo, MakePath} from "./actions";
 
+import {State} from "./types";
+
 export interface ConsumeArgs {
   test: (action: Action) => boolean;
 }
@@ -8,7 +10,7 @@ interface Args {
   action: Action;
   consume: <K>(args: ConsumeArgs) => [K[], boolean];
   stable: HTMLCanvasElement;
-  state: any;
+  state: State;
   temp: HTMLCanvasElement;
 }
 
@@ -20,6 +22,15 @@ export default function process({action, consume, stable, state, temp}: Args): b
   const tempCtx = temp.getContext("2d");
 
   switch (action.type) {
+    case "change-sheet":
+      if (action.sheet >= state.sheets.length) {
+        state.sheets.length = action.sheet;
+      }
+      if (action.sheet !== state.activeSheet) {
+        stabCtx.clearRect(0, 0, stable.width, stable.height);
+      }
+      state.activeSheet = action.sheet;
+      return true;
     case "set-stroke-style": {
       stabCtx.strokeStyle
         = state.strokeStyle
@@ -27,6 +38,9 @@ export default function process({action, consume, stable, state, temp}: Args): b
         = action.strokeStyle;
       return true;
     }
+    case "clear":
+      stabCtx.clearRect(0, 0, stable.width, stable.height);
+      return true;
     case "erase": {
       const ctx = stable.getContext("2d");
       ctx.save();
@@ -61,6 +75,7 @@ export default function process({action, consume, stable, state, temp}: Args): b
       ctx.strokeStyle = state.strokeStyle;
       ctx.lineWidth = state.lineWidth;
       
+      // draw single point if length = 1
       if (points.length === 1) {
         ctx.fillStyle = strokeStyle;
         ctx.fillRect(
@@ -84,11 +99,10 @@ export default function process({action, consume, stable, state, temp}: Args): b
             floor(height * midY)
           );
         }
-
+        
         ctx.stroke();
       }
-
       return complete;
-    }
   }
 }
+

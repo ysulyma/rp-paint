@@ -1,12 +1,20 @@
 import type {Action, MakePath} from "../actions";
-import type {State} from "../Paint";
+import type {Consumer} from "../Consumer";
 
 interface HoverArgs {
-  canvas: HTMLCanvasElement;
+  layers: {
+    stable: HTMLCanvasElement;
+    temp: HTMLCanvasElement;
+    aid: HTMLCanvasElement;
+  };
+  hit: {
+    x: number;
+    y: number;
+  };
 }
 
 export interface ToolArgs {
-  canvas: HTMLCanvasElement;
+  consumer: Consumer;
   e: MouseEvent | TouchEvent | React.MouseEvent<unknown> | React.TouchEvent<unknown>;
   hit?: {
     x: number;
@@ -15,12 +23,11 @@ export interface ToolArgs {
     dy?: number;
   };
   layers: {
-    [key: string]: React.MutableRefObject<HTMLCanvasElement>;
+    stable: HTMLCanvasElement;
+    temp: HTMLCanvasElement;
+    aid: HTMLCanvasElement;
   };
   record: (a: Action) => void;
-  stack: Action[];
-  state: State;
-  target?: HTMLCanvasElement;
 }
 
 export interface Tool {

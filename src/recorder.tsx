@@ -86,7 +86,7 @@ class BrushRecorder implements Recorder {
     for (let i = 0; i < this.captureData.length; ++i) {
       this.captureData[i][0] = formatNum(this.captureData[i][0]);
     }
-    return this.captureData;
+    return format(this.captureData);
   }
 
   getTime() {
@@ -159,17 +159,18 @@ function offsetParent(node: HTMLElement) {
   return { left: rect.left, top: rect.top };
 }
 
-function format(x: any) {
-  switch(true) {
-    case (x instanceof Array):
-      return x.map(format);
-      break;
-    case typeof x === "number":
-      return parseFloat(x.toFixed(5));
-      break;
-    default:
-      return x;
+function format(x: any): any {
+  if (x instanceof Array) {
+    return x.map(format);
+  } else if (typeof x === "object") {
+    const y = {};
+    for (const key of Object.keys(x))
+      y[key] = format(x[key]);
+    return y;
+  } else if (typeof x === "number") {
+    return parseFloat(x.toFixed(5));
   }
+  return x;
 }
 
 function formatNum(x: number): number {

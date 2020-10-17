@@ -10,5 +10,5 @@
     "suppressImplicitAnyIndexErrors": true,
     "target": "ES2017"
   },
-  "files": ["./src/Paint.tsx", "./src/recorder.tsx", "./rp-paint.d.ts", "./recorder.d.ts"]
+  "files": ["./src/plugin.tsx", "./src/recorder.tsx", "./rp-paint.d.ts", "./recorder.d.ts"]
 }
