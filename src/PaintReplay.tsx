@@ -1,12 +1,18 @@
+/* imports */
 import * as React from "react";
 import {useCallback, useContext, useMemo, useReducer, useRef, useState} from "react";
 
-import {Player, Utils, ReplayData} from "ractive-player";
+import {Player, Utils, ReplayData, usePlayer} from "ractive-player";
 const {replay} = Utils.animation,
       {between} = Utils.misc;
 
 import {Action, MakePath} from "./actions";
+import {State} from "./types";
+import {extractRefs} from "./utils";
 
+import {Consumer} from "./Consumer";
+
+/* interfaces */
 const {floor, max, min} = Math;
 
 interface Props {
@@ -15,43 +21,59 @@ interface Props {
   replay?: ReplayData<Action>;
 }
 
-type State = any;
-
 const initialState: State = {
   activeSheet: 0,
   strokeStyle: "#000",
-  lineWidth: 2
+  lineWidth: 2,
+  sheets: []
 };
 
+/* declarations */
+// main component
 export default function PaintReplay(props: Props) {
-  const {playback, script} = useContext(Player.Context);
-  const tempLayer = useRef<HTMLCanvasElement>();
-  const renderLayer = useRef<HTMLCanvasElement>();
+  const {playback, script} = usePlayer();
+  
+  // XXX testing!
+  (window as any).playback = playback;
   const data = props.replay;
-
-  const stableIndex = useRef(0);
-  const stableSum = useRef(0);
+  (window as any).data = data;
 
   const state = useRef(initialState);
 
+  // initial configuration of feed --- we should do this differently...
+  const feed = useRef<Action[]>([
+    {type: "change-sheet", sheet: 0},
+    {type: "set-stroke-style", strokeStyle: "#FFF"}
+  ]);
+
+  // stable + temp layers
+  const $layers = {
+    stable: useRef<HTMLCanvasElement>(),
+    temp: useRef<HTMLCanvasElement>()
+  };
+
   React.useEffect(() => {
     const start = script.parseStart(props.start) ?? 0;
-    let lastTime = playback.currentTime;
 
-    function repaint(currentTime: number, reset = false) {
-      const stable = renderLayer.current,
+    let lastTime = playback.currentTime;
+    let stableIndex = 0;
+    let stableSum = 0;
+
+    function repaint(currentTime: number = playback.currentTime, reset = false) {
+      const stable = $layers.stable.current,
             stabCtx = stable.getContext("2d");
-      const temp = tempLayer.current,
+      const temp = $layers.temp.current,
             tempCtx = temp.getContext("2d");
       const {lineWidth, strokeStyle} = state.current;
 
       // reset canvases and counts
       if ((currentTime < lastTime) || reset) {
-        stableIndex.current = 0;
-        stableSum.current = 0;
+        stableIndex = 0;
+        stableSum = 0;
         stabCtx.clearRect(0, 0, stable.width, stable.height);
       }
       lastTime = currentTime;
+      state.current.repaint = repaint;
 
       // clear temp canvas
       tempCtx.clearRect(0, 0, temp.width, temp.height);
@@ -60,39 +82,71 @@ export default function PaintReplay(props: Props) {
       if (currentTime < start)
         return;
 
-      let i = stableIndex.current;
-      let sum = stableSum.current;
+      // temporary counters
+      let i = stableIndex;
+      let sum = stableSum;
 
-      /**
-        Consumes next actions in stack verifying test condition.
-        "complete" return value indicates whether quit due to time.
-      */
-      function consume({test}: ConsumeArgs): [Action[], boolean] {
-        const vals = [];
-        for (; i+1 < data.length; ++i) {
-          const [s, act] = data[i+1];
-          if (currentTime <= s+start+sum) {
-            return [vals, false];
-            break;
-          }
-          if (!test(act)) {
-            return [vals, true];
-            break;
-          }
-          sum += s;
-          vals.push(act);
-        }
-        return [vals, true];
-      }
-
-      // clear temp layer
-      tempCtx.clearRect(0, 0, temp.width, temp.height);
+      /* determine actions to run */
+      let lastSheetChange = null;
+      let lastStrokeChange = null;
+      let stopIndex = i;
 
       for (; i < data.length; ++i) {
         const [t, action] = data[i];
         sum += t;
-        if (currentTime <= start + sum)
+        if (currentTime <= start + sum) {
           break;
+        }
+
+        stopIndex = i+1;
+
+        if (action.type === "set-stroke-style") {
+          lastStrokeChange = i;
+        } else if (action.type === "change-sheet") {
+          lastSheetChange = i;
+          stableSum = sum-t;
+        }
+      }
+
+      /* now play the actions */
+      // start at most recent sheet
+      if (lastSheetChange !== null) {
+        stableIndex = lastSheetChange;
+
+        // set stroke color correctly
+        if (lastStrokeChange !== null) {
+          process({
+            action: data[lastStrokeChange][1],
+            consume,
+            stable,
+            state: state.current,
+            temp
+          });
+        }
+      }
+
+      i = stableIndex;
+      sum = stableSum;
+
+      // consuming function
+      function consume({test}: ConsumeArgs): [Action[], boolean] {
+        const vals = [];
+        for (; i+1 < stopIndex; ++i) {
+          const [t, action] = data[i+1];
+
+          if (!test(action)) {
+            return [vals, true];
+            break;
+          }
+          sum += t;
+          vals.push(action);
+        }
+        return [vals, stopIndex === data.length];
+      }
+
+      for (; i < stopIndex; ++i) {
+        const [t, action] = data[i];
+        sum += t;
 
         const complete = process({
           action,
@@ -103,8 +157,8 @@ export default function PaintReplay(props: Props) {
         });
 
         if (complete) {
-          stableIndex.current = i+1;
-          stableSum.current = sum;
+          stableIndex = i+1;
+          stableSum = sum;
         } else {
           break;
         }
@@ -112,30 +166,35 @@ export default function PaintReplay(props: Props) {
     }
 
     function resize() {
-      const rect = renderLayer.current.getBoundingClientRect();
-      tempLayer.current.height = renderLayer.current.height = rect.height;
-      tempLayer.current.width = renderLayer.current.width = rect.width;
+      const rect = $layers.stable.current.getBoundingClientRect();
+      $layers.temp.current.height = $layers.stable.current.height = rect.height;
+      $layers.temp.current.width = $layers.stable.current.width = rect.width;
 
       repaint(playback.currentTime, true);
     }
 
     window.addEventListener("resize", resize);
-    playback.hub.on("seek", repaint);
+
+    function repaintReset(t: number) {
+      repaint(t, true);
+    }
+
+    playback.hub.on("seek", repaintReset);
     playback.hub.on("timeupdate", repaint);
 
     resize();
 
     return () => {
       window.removeEventListener("resize", resize);
-      playback.hub.off("seek", repaint);
+      playback.hub.off("seek", repaintReset);
       playback.hub.off("timeupdate", repaint);
     };
-  }, [renderLayer.current, tempLayer.current]);
+  }, [$layers.stable.current, $layers.temp.current]);
 
   return (
     <div className="rp-paint-view">
-      <canvas className="rp-paint-layer noinput" ref={tempLayer}/>
-      <canvas className="rp-paint-layer noinput" ref={renderLayer}/>
+      <canvas className="rp-paint-layer noinput" ref={$layers.temp}/>
+      <canvas className="rp-paint-layer noinput" ref={$layers.stable}/>
     </div>
   );
 }
