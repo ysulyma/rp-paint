@@ -1,6 +1,6 @@
 {
   "name": "rp-paint",
-  "version": "0.8",
+  "version": "0.8.0",
   "description": "Doodling recorder and replayer for ractive-player/rp-recording",
   "files": [
     "rp-paint.js",
@@ -18,7 +18,7 @@
     "ractive-player",
     "rp-recording"
   ],
-  "author": "Yuri Sulyma <yuri@lmqm.xyz>",
+  "author": "Yuri Sulyma <yuri@ractive-player.org>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/ysulyma/rp-paint/issues"
