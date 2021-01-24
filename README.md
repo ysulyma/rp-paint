@@ -41,4 +41,41 @@ const controls = (<>
 </Player>
 ```
 
-## Controls
+## Keyboard controls
+
+<table>
+  <tbody>
+    <tr>
+      <td><kbd>Alt+&darr;</kbd></td>
+      <td>Down one layer</td>
+    </tr>
+    <tr>
+      <td><kbd>Alt+&uarr;</kbd></td>
+      <td>Up one layer</td>
+    </tr>
+    <tr>
+      <td><kbd>Alt+[number]</kbd></td>
+      <td>Select color by number</td>
+    </tr>
+    <tr>
+      <td><kbd>Alt+C</kbd></td>
+      <td>Clear layer</td>
+    </tr>
+    <tr>
+      <td><kbd>Alt+D</kbd></td>
+      <td>Draw tool</td>
+    </tr>
+    <tr>
+      <td><kbd>Alt+E</kbd></td>
+      <td>Eraser tool</td>
+    </tr>
+    <tr>
+      <td><kbd>Alt+H</kbd></td>
+      <td>Toggle paint canvas</td>
+    </tr>
+    <tr>
+      <td><kbd>Alt+P</kbd></td>
+      <td>Toggle settings</td>
+    </tr>
+  </tbody>
+</table>
