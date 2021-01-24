@@ -11,7 +11,7 @@ Very beta! Use at your own risk.
 ## Usage
 
 ```tsx
-import {Audio, Controls, IdMap, Script, Player} from "ractive-player";
+import {Controls, Script, Player} from "ractive-player";
 import {RecordingControl} from "rp-recording";
 
 import {PaintCanvas, PaintReplay} from "rp-paint";
