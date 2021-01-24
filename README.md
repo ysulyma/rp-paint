@@ -2,7 +2,7 @@
 
 Doodling recorder and replayer for [ractive-player](https://github.com/ysulyma/ractive-player)/[rp-recording](https://github.com/ysulyma/rp-recording/).
 
-Very beta! Use at your own risk.
+Alpha version! Use at your own risk.
 
 ## Installation
 
