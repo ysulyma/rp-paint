@@ -1,7 +1,11 @@
 {
   "name": "rp-paint",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Doodling recorder and replayer for ractive-player/rp-recording",
+  "exports": {
+    ".": "./rp-paint.js",
+    "./recorder": "./rp-paint.recorder.js"
+  },
   "files": [
     "rp-paint.js",
     "rp-paint.recorder.js",
@@ -30,7 +34,6 @@
     "ractive-player": "^2.0.3"
   },
   "devDependencies": {
-    "@types/react": "^16.9.34",
     "@typescript-eslint/eslint-plugin": "^4.14.0",
     "@typescript-eslint/parser": "^4.14.0",
     "eslint": "^7.18.0",
