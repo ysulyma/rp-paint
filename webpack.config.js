@@ -74,7 +74,7 @@ module.exports = [
     ...baseConfig,
     entry: `${__dirname}/src/recorder.tsx`,
     output: {
-      filename: "recorder.js",
+      filename: "rp-paint.recorder.js",
       path: __dirname,
       library: ["RPPaint", "PaintRecorderPlugin"],
       libraryExport: "default",
