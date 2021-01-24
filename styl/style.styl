@@ -1,0 +1,144 @@
+.rp-paint-layer
+  background transparent
+  height 100%
+  width 100%
+  position absolute
+  left 0
+  top 0
+  z-index 2
+  
+  &.noinput
+    pointer-events none
+    
+.rp-paint-canvas-container
+  &:not(.visible)
+    opacity 0
+    pointer-events none
+
+.rp-paint-settings
+  background #333
+  border 1px solid #222
+  border-radius .25rem
+  box-shadow .2rem .2rem .2rem #0004
+  box-sizing content-box
+  padding .4rem
+  position absolute
+  height 4.8rem
+  z-index 20000
+  white-space nowrap
+  left 80%
+  top 1rem
+    
+  > *
+    display inline-block
+    margin 0
+    vertical-align top
+    
+  > ul > li
+    border 1px solid #999
+    height 4rem
+    width 4rem
+    display inline-block
+    list-style-type none
+    margin 0 .15rem
+    vertical-align top
+    
+    > input[type="radio"]
+      box-shadow inset 0 0 2px #000
+      border 0
+      cursor pointer
+      height 100%
+      width 100%
+      vertical-align top
+      -webkit-appearance none
+
+.rp-paint-drag-handle, .rp-paint-drag-handle:empty
+  width 1rem
+  height 100%
+  cursor move
+  
+  &::before
+    content "°"
+    color #FFF
+    vertical-align middle
+    line-height 4.8rem
+
+.rp-paint-tool
+  background #222
+  border 1px solid #000
+  height 100%
+  display inline-block
+  padding 2px
+  margin-right 2px
+  width 4.8rem
+  
+  &.selected
+    border 1px solid gold
+    background #444
+
+  > svg
+    height 100%
+
+.rp-paint-eraser
+  background #444
+
+.rp-paint-palette
+  background #444
+  box-shadow .2rem .2rem .2rem #0004
+  padding .2em
+  height calc(4.8rem + 2 * .2em)
+  position absolute
+  top 4.8rem
+  left calc(1rem + 1 * (4.8rem + 2px) + 2px)
+  
+.rp-sheets-dialog
+  background #444
+  box-shadow 0 .2rem .5rem #000
+  padding .2em
+  position absolute
+  top calc(4.8rem + .8rem)
+  left calc(1rem + 3 * (4.8rem + 2px) + 2px)
+  
+  > ol
+    list-style-position inside
+    
+    > li
+      color #FFF
+      height 5em
+      vertical-align top
+      
+      &.selected
+        background #666
+      
+      > img
+        height 100%
+        vertical-align top
+  
+.rp-paint-color
+  border 1px solid #000
+  display inline-block
+  height 4.8rem
+  line-height 4.8rem
+  width 4.8rem
+  
+  margin-right .5em
+  position relative
+
+  > input
+    border none
+    height 100%
+    width 100%
+    
+  > kbd
+    color #FFF
+    font-size 2em
+    
+    position absolute
+    left 0
+    height 0
+    width 100%
+    height 100%
+    pointer-events none
+    
+    text-align center
+    vertical-align middle
