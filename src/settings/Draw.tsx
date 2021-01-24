@@ -45,7 +45,9 @@ export default function Draw(props: Props) {
 
   return (
     <button className={classNames.join(" ")} {...events}>
-      <Brush/>
+      <svg viewBox="0 0 100 100">
+      {Brush}
+      </svg>
     </button>
   );
 }

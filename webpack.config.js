@@ -25,7 +25,7 @@ const baseConfig = {
     },
   },
 
-  mode: process.env.NODE_ENV,
+  mode: "production",
 
   module: {
     rules: [
@@ -45,7 +45,7 @@ const baseConfig = {
         }
       })
     ],
-    noEmitOnErrors: false
+    emitOnErrors: true
   },
 
   plugins: [

@@ -26,9 +26,6 @@ import PaintSettings from "./Settings";
 
 // interfaces
 interface Props {
-  start: number | string;
-  end: number | string;
-  replay?: ReplayData<Action>;
   recorder?: typeof PaintRecorder.recorder;
 }
 
@@ -78,10 +75,7 @@ function reducer(state: State, action: UIAction) {
 /* main class */
 export function PaintCanvas(props: Props) {
   // initial configuration of feed --- we should do this differently...
-  const feed = useRef<Action[]>([
-    {type: "change-sheet", sheet: 0},
-    {type: "set-stroke-style", strokeStyle: "#FFF"}
-  ]);
+  const feed = useRef<Action[]>([]);
 
   // we have three layers
   const $layers = {
@@ -100,12 +94,12 @@ export function PaintCanvas(props: Props) {
     feed: feed.current,
 
     record(action) {
-      props.recorder?.instance?.capture?.(action);
+      props.recorder?.captureAction(action);
       this.feed.push(action);
     }
   }));
   const consumer = $consumer.current;
-  (window as any).consumer = consumer;
+  // (window as any).consumer = consumer;
 
   // context
   const context = {

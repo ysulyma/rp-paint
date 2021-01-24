@@ -22,7 +22,7 @@ export const MoveToHandler: Handler = {
 
     const [lineTos, complete] = this.consume({
       test: act => act.type === "line-to"
-    });
+    }) as [LineTo[], boolean];
 
     const points = [[action.x, action.y], ...lineTos.map(_ => [_.x, _.y])];
 

@@ -1,5 +1,6 @@
 import * as React from "react";
 import {ReplayData} from "ractive-player";
+import {Recorder} from "rp-recording";
 
 interface Clear {
   type: "clear";
@@ -52,19 +53,17 @@ interface MakePath {
 
 type Action =
   Clear | Erase | SetStrokeStyle |
-  | ChangeSheet |
+  ChangeSheet |
   MoveTo | LineTo | EndPath | MakePath;
 
 type UIAction =
   SetStrokeStyle | SetTool;
 
-
-interface Props {
+export function PaintCanvas(props: {
+  recorder?: {new(...args: any): Recorder};
+}): JSX.Element;
+export function PaintReplay(props: {
   start: number | string;
-  end: number | string;
+  end?: number | string;
   replay?: ReplayData<Action>;
-  recorder?: unknown;
-}
-
-export function PaintCanvas(props: Props): React.FC;
-export function PaintReplay(props: Props): React.FC;
+}): JSX.Element;

@@ -2,7 +2,7 @@
 import * as React from "react";
 import {useCallback, useContext, useMemo, useReducer, useRef, useState} from "react";
 
-import {Player, Utils, ReplayData, usePlayer} from "ractive-player";
+import {Utils, ReplayData, usePlayer} from "ractive-player";
 const {replay} = Utils.animation,
       {between} = Utils.misc;
 
@@ -33,10 +33,7 @@ const initialState: State = {
 export default function PaintReplay(props: Props) {
   const {playback, script} = usePlayer();
   
-  // XXX testing!
-  (window as any).playback = playback;
-  const data = props.replay;
-  (window as any).data = data;
+  const data = useRef(props.replay ?? []);
 
   const state = useRef(initialState);
 
@@ -91,8 +88,8 @@ export default function PaintReplay(props: Props) {
       let lastStrokeChange = null;
       let stopIndex = i;
 
-      for (; i < data.length; ++i) {
-        const [t, action] = data[i];
+      for (; i < data.current.length; ++i) {
+        const [t, action] = data.current[i];
         sum += t;
         if (currentTime <= start + sum) {
           break;
@@ -116,7 +113,7 @@ export default function PaintReplay(props: Props) {
         // set stroke color correctly
         if (lastStrokeChange !== null) {
           process({
-            action: data[lastStrokeChange][1],
+            action: data.current[lastStrokeChange][1],
             consume,
             stable,
             state: state.current,
@@ -132,7 +129,7 @@ export default function PaintReplay(props: Props) {
       function consume({test}: ConsumeArgs): [Action[], boolean] {
         const vals = [];
         for (; i+1 < stopIndex; ++i) {
-          const [t, action] = data[i+1];
+          const [t, action] = data.current[i+1];
 
           if (!test(action)) {
             return [vals, true];
@@ -141,11 +138,11 @@ export default function PaintReplay(props: Props) {
           sum += t;
           vals.push(action);
         }
-        return [vals, stopIndex === data.length];
+        return [vals, stopIndex === data.current.length];
       }
 
       for (; i < stopIndex; ++i) {
-        const [t, action] = data[i];
+        const [t, action] = data.current[i];
         sum += t;
 
         const complete = process({
@@ -175,18 +172,14 @@ export default function PaintReplay(props: Props) {
 
     window.addEventListener("resize", resize);
 
-    function repaintReset(t: number) {
-      repaint(t, true);
-    }
-
-    playback.hub.on("seek", repaintReset);
+    playback.hub.on("seek", repaint);
     playback.hub.on("timeupdate", repaint);
 
     resize();
 
     return () => {
       window.removeEventListener("resize", resize);
-      playback.hub.off("seek", repaintReset);
+      playback.hub.off("seek", repaint);
       playback.hub.off("timeupdate", repaint);
     };
   }, [$layers.stable.current, $layers.temp.current]);
