@@ -1,7 +1,7 @@
 import {Action} from "./actions";
 import {Color} from "./types";
 
-import type {Playback, ReplayData} from "ractive-player";
+import type {Playback, ReplayData} from "liqvid";
 
 export interface ConsumeArgs {
   test: (action: Action) => boolean;

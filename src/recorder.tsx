@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useMemo, useState} from "react";
 
-import type {ReplayData} from "ractive-player";
+import type {ReplayData} from "liqvid";
 
 import {ReplayDataRecorder} from "rp-recording";
 import type {RecorderPlugin} from "rp-recording";

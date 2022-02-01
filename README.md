@@ -1,6 +1,6 @@
 # rp-paint
 
-Doodling recorder and replayer for [ractive-player](https://github.com/ysulyma/ractive-player)/[rp-recording](https://github.com/ysulyma/rp-recording/).
+Doodling recorder and replayer for [Liqvid](https://liqvidjs.org)/[rp-recording](https://github.com/ysulyma/rp-recording/).
 
 Alpha version! Use at your own risk.
 
@@ -11,7 +11,7 @@ Alpha version! Use at your own risk.
 ## Usage
 
 ```tsx
-import {Controls, Script, Player} from "ractive-player";
+import {Controls, Script, Player} from "liqvid";
 import {RecordingControl} from "rp-recording";
 
 import {PaintCanvas, PaintReplay} from "rp-paint";

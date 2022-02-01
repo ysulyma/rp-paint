@@ -2,7 +2,7 @@
 import * as React from "react";
 import {useCallback, useContext, useMemo, useReducer, useRef, useState} from "react";
 
-import {Player, Utils, ReplayData} from "ractive-player";
+import {Player, Utils, ReplayData} from "liqvid";
 const {replay} = Utils.animation,
       {dragHelperReact} = Utils.interactivity,
       {between} = Utils.misc;

@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useCallback, useContext, useEffect, useMemo, useRef, useState} from "react";
 
-import {Utils} from "ractive-player";
+import {Utils} from "liqvid";
 const {onClick} = Utils.mobile;
 
 import {Brush} from "../images";
